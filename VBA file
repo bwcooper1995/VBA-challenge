@@ -1,0 +1,36 @@
+Sub stocks()
+    For Each ws In Worksheets
+    Range("I1").Value = "Ticker"
+    Range("J1").Value = "Yearly Change"
+    Range("K1").Value = "Percent Change"
+    Range("L1").Value = "Total Stock Volume"
+    Sheets(2).Range("A1:L1").Value = Sheets(1).Range("A1:L1").Value
+    Sheets(3).Range("A1:L1").Value = Sheets(1).Range("A1:L1").Value
+        LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+    Dim currentTicker, nextTicker As String
+    Dim currentTickerLabelRow As Integer
+    currentTickerLabelRow = 2
+    Dim currentVolume, currentVolumeTotal, currentChange, currentChangeTotal As Double
+    currentVolume = 0
+    currentVolumeTotal = 0
+    currentChange = 0
+    currentChangeTotal = 0
+        For row_num = 2 To LastRow
+            currentTicker = Cells(row_num, 1).Value
+            nextTicker = Cells(row_num + 1, 1).Value
+            currentVolume = Cells(row_num, 7).Value
+            currentVolumeTotal = currentVolumeTotal + currentVolume
+            currentChange = Cells(row_num, 6) - Cells(row_num, 3).Value
+            currentChangeTotal = currentChangeTotal + currentChange
+                If (currentTicker <> nextTicker) Then
+                    Range("I" & currentTickerLabelRow).Value = currentTicker
+                    Range("L" & currentTickerLabelRow).Value = currentVolumeTotal
+                    Range("J" & currentTickerLabelRow).Value = currentChangeTotal
+                    currentTickerLabelRow = currentTickerLabelRow + 1
+                    currentVolumeTotal = 0
+                    currentChangeTotal = 0
+                End If
+        Next row_num
+    
+    Next ws
+End Sub
